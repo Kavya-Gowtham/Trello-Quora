@@ -55,4 +55,14 @@ public class UserDao {
             return null;
         }
     }
+
+    /**
+     * Method to update user in db
+     *
+     * @param updatedUserEntity : UserEntity body
+     * @return updated response
+     */
+    public void updateUserEntity(final UserEntity updatedUserEntity) {
+        entityManager.merge(updatedUserEntity);
+    }
 }
