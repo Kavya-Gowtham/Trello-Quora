@@ -12,6 +12,23 @@ public class UserDao {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    /**
+     * Fetch a single user by id
+     *
+     * @param userId : to retch details
+     * @return User details
+     */
+    public UserEntity getUserById(final String userId) {
+        try {
+            return entityManager
+                    .createNamedQuery("userByUserId", UserEntity.class)
+                    .setParameter("userId", userId)
+                    .getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
     /**
      * create user in database.
      *
