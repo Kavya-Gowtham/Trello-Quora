@@ -52,7 +52,7 @@ public class UserController {
         userEntity.setCountry(signupUserRequest.getCountry());
         userEntity.setAboutMe(signupUserRequest.getAboutMe());
         userEntity.setDob(signupUserRequest.getDob());
-        userEntity.setRole("nonadmin");
+        userEntity.setRole("admin");
         userEntity.setContactNumber(signupUserRequest.getContactNumber());
 
         UserEntity createdUserEntity = userAuthService.signup(userEntity);
