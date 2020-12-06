@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -51,6 +50,7 @@ public class UserAuthenticationService {
         return userDao.createUser(userEntity);
     }
 
+
     /**
      * the signin user method
      *
@@ -83,13 +83,10 @@ public class UserAuthenticationService {
                 jwtTokenProvider.generateToken(userEntity.getUuid(), now, expiresAt));
         userAuthEntity.setLoginAt(now);
         userAuthEntity.setExpiresAt(expiresAt);
-
         userAuthDao.createAuthToken(userAuthEntity);
         userDao.updateUserEntity(userEntity);
-
         return userAuthEntity;
     }
-
     // checks whether the username exist in the database
     private boolean isUserNameInUse(final String userName) {
         return userDao.getUserByUserName(userName) != null;

@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Base64;
 
-
 @RestController
 @RequestMapping("/")
 public class UserController {
@@ -62,7 +61,6 @@ public class UserController {
                         .status("USER SUCCESSFULLY REGISTERED");
         return new ResponseEntity<SignupUserResponse>(userResponse, HttpStatus.CREATED);
     }
-
     /**
      * This method is for a user to singin.
      *
