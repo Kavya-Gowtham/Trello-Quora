@@ -127,7 +127,6 @@ public class QuestionService {
             }
         }
     }
-
     /**
      * Business logic to authorize user and delete question
      *
