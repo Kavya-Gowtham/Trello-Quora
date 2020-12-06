@@ -11,6 +11,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/")
 public class AnswerController {
@@ -91,5 +94,34 @@ public class AnswerController {
         AnswerDeleteResponse answerDeleteResponse =
                 new AnswerDeleteResponse().id(answerEntity.getUuid()).status("ANSWER DELETED");
         return new ResponseEntity<AnswerDeleteResponse>(answerDeleteResponse, HttpStatus.OK);
+    }
+    /**
+     * This endpoint get all the answer to a question
+     *
+     * @param questionId : Answer ID that you want to Delete
+     * @param accessToken : access-token to authenticate
+     * @throws AuthorizationFailedException : Returns authorization failed exception
+     * @throws InvalidQuestionException : If Question id is invalid returns invalid Question id
+     *     response
+     * @return All the answer to the Question
+     */
+    @RequestMapping(
+            method = RequestMethod.GET,
+            path = "/answer/all/{questionId}",
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<AnswerDetailsResponse>> getAllAnswersToQuestion(
+            @RequestHeader("authorization") final String accessToken,
+            @PathVariable("questionId") String questionId)
+            throws AuthorizationFailedException, InvalidQuestionException {
+        List<AnswerEntity> answers = answerService.getAllAnswersToQuestion(questionId, accessToken);
+        List<AnswerDetailsResponse> answerDetailsResponses = new ArrayList<>();
+        for (AnswerEntity answerEntity : answers) {
+            AnswerDetailsResponse answerDetailsResponse = new AnswerDetailsResponse();
+            answerDetailsResponse.setId(answerEntity.getUuid());
+            answerDetailsResponse.setQuestionContent(answerEntity.getQuestionEntity().getContent());
+            answerDetailsResponse.setAnswerContent(answerEntity.getAnswer());
+            answerDetailsResponses.add(answerDetailsResponse);
+        }
+        return new ResponseEntity<List<AnswerDetailsResponse>>(answerDetailsResponses, HttpStatus.OK);
     }
 }
