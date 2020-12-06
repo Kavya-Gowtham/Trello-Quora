@@ -96,7 +96,7 @@ public class UserController {
     /**
      * Request mapping to sign-out user
      *
-     * @param acessToken
+     * @param accessToken
      * @return SignoutResponse
      * @throws SignOutRestrictedException
      */
@@ -105,8 +105,8 @@ public class UserController {
             path = "/user/signout",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SignoutResponse> signout(
-            @RequestHeader("authorization") final String acessToken) throws SignOutRestrictedException {
-        UserEntity userEntity = userAuthService.signout(acessToken);
+            @RequestHeader("authorization") final String accessToken) throws SignOutRestrictedException {
+        UserEntity userEntity = userAuthService.signout(accessToken);
         SignoutResponse signoutResponse =
                 new SignoutResponse().id(userEntity.getUuid()).message("SIGNED OUT SUCCESSFULLY");
         return new ResponseEntity<SignoutResponse>(signoutResponse, HttpStatus.OK);
