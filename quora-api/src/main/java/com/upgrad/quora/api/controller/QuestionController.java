@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -114,5 +113,27 @@ public class QuestionController {
         QuestionEditResponse questionEditResponse =
                 new QuestionEditResponse().id(questionEntity.getUuid()).status("QUESTION EDITED");
         return new ResponseEntity<QuestionEditResponse>(questionEditResponse, HttpStatus.OK);
+    }
+
+    /**
+     * Controller method to handle DELETE request to delete question
+     *
+     * @param accessToken
+     * @param questionId
+     * @return
+     * @throws AuthorizationFailedException
+     * @throws InvalidQuestionException
+     */
+    @RequestMapping(method = RequestMethod.DELETE, path = "/question/delete/{questionId}")
+    public ResponseEntity<QuestionDeleteResponse> deleteQuestion(
+            @RequestHeader("authorization") final String accessToken,
+            @PathVariable("questionId") final String questionId)
+            throws AuthorizationFailedException, InvalidQuestionException {
+
+        QuestionEntity questionEntity = questionService.deleteQuestion(accessToken, questionId);
+        QuestionDeleteResponse questionDeleteResponse = new QuestionDeleteResponse();
+        questionDeleteResponse.setId(questionEntity.getUuid());
+        questionDeleteResponse.setStatus("QUESTION DELETED");
+        return new ResponseEntity<QuestionDeleteResponse>(questionDeleteResponse, HttpStatus.OK);
     }
 }

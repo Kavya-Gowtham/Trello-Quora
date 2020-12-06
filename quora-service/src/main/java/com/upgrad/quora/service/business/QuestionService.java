@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -127,5 +126,37 @@ public class QuestionService {
                 }
             }
         }
+    }
+    /**
+     * Business logic to authorize user and delete question
+     *
+     * @param accessToken
+     * @param questionId
+     * @return deleted question
+     * @throws AuthorizationFailedException
+     * @throws InvalidQuestionException
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public QuestionEntity deleteQuestion(final String accessToken, final String questionId)
+            throws AuthorizationFailedException, InvalidQuestionException {
+        UserAuthEntity userAuthEntity = userAuthDao.getUserAuthByToken(accessToken);
+        if (userAuthEntity == null) {
+            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
+        } else if (userAuthEntity.getLogoutAt() != null) {
+            throw new AuthorizationFailedException(
+                    "ATHR-002", "User is signed out.Sign in first to delete the question");
+        }
+        QuestionEntity questionEntity = questionDao.getQuestionByUuid(questionId);
+        if (questionEntity == null) {
+            throw new InvalidQuestionException("QUES-001", "Entered question uuid does not exist");
+        }
+        if (!questionEntity.getUserEntity().getUuid().equals(userAuthEntity.getUserEntity().getUuid())
+                && !userAuthEntity.getUserEntity().getRole().equals("admin")) {
+            throw new AuthorizationFailedException(
+                    "ATHR-003", "Only the question owner or admin can delete the question");
+        }
+
+        questionDao.deleteQuestion(questionEntity);
+        return questionEntity;
     }
 }
