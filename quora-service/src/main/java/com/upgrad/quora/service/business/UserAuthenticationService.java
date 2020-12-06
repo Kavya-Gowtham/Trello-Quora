@@ -68,6 +68,7 @@ public class UserAuthenticationService {
         if (userEntity == null) {
             throw new AuthenticationFailedException("ATH-001", "This username does not exist");
         }
+
         final String encryptedPassword = PasswordCryptographyProvider.encrypt(password, userEntity.getSalt());
         if (!encryptedPassword.equals(userEntity.getPassword())) {
             throw new AuthenticationFailedException("ATH-002", "Password failed");
