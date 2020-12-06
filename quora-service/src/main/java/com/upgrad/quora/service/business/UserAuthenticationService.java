@@ -68,8 +68,7 @@ public class UserAuthenticationService {
         if (userEntity == null) {
             throw new AuthenticationFailedException("ATH-001", "This username does not exist");
         }
-        final String encryptedPassword =
-                passwordCryptographyProvider.encrypt(password, userEntity.getSalt());
+        final String encryptedPassword = PasswordCryptographyProvider.encrypt(password, userEntity.getSalt());
         if (!encryptedPassword.equals(userEntity.getPassword())) {
             throw new AuthenticationFailedException("ATH-002", "Password failed");
         }
@@ -84,10 +83,8 @@ public class UserAuthenticationService {
                 jwtTokenProvider.generateToken(userEntity.getUuid(), now, expiresAt));
         userAuthEntity.setLoginAt(now);
         userAuthEntity.setExpiresAt(expiresAt);
-
         userAuthDao.createAuthToken(userAuthEntity);
         userDao.updateUserEntity(userEntity);
-
         return userAuthEntity;
     }
 
