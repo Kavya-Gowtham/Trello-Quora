@@ -5,12 +5,14 @@ import com.upgrad.quora.service.business.QuestionService;
 import com.upgrad.quora.service.entity.QuestionEntity;
 import com.upgrad.quora.service.exception.AuthorizationFailedException;
 import com.upgrad.quora.service.exception.InvalidQuestionException;
+import com.upgrad.quora.api.model.QuestionDetailsResponse;
+import com.upgrad.quora.api.model.QuestionRequest;
+import com.upgrad.quora.api.model.QuestionResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;

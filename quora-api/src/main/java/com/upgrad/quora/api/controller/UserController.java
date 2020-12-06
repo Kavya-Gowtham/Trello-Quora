@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Base64;
-
-
 @RestController
 @RequestMapping("/")
 public class UserController {
@@ -64,7 +62,6 @@ public class UserController {
                         .status("USER SUCCESSFULLY REGISTERED");
         return new ResponseEntity<SignupUserResponse>(userResponse, HttpStatus.CREATED);
     }
-
     /**
      * This method is for a user to singin.
      *
@@ -98,7 +95,7 @@ public class UserController {
     /**
      * Request mapping to sign-out user
      *
-     * @param acessToken
+     * @param accessToken
      * @return SignoutResponse
      * @throws SignOutRestrictedException
      */
@@ -107,8 +104,8 @@ public class UserController {
             path = "/user/signout",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SignoutResponse> signout(
-            @RequestHeader("authorization") final String acessToken) throws SignOutRestrictedException {
-        UserEntity userEntity = userAuthService.signout(acessToken);
+            @RequestHeader("authorization") final String accessToken) throws SignOutRestrictedException {
+        UserEntity userEntity = userAuthService.signout(accessToken);
         SignoutResponse signoutResponse =
                 new SignoutResponse().id(userEntity.getUuid()).message("SIGNED OUT SUCCESSFULLY");
         return new ResponseEntity<SignoutResponse>(signoutResponse, HttpStatus.OK);
