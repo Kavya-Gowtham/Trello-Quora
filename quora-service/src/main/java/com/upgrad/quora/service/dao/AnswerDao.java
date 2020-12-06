@@ -45,4 +45,16 @@ public class AnswerDao {
     public void updateAnswer(AnswerEntity answerEntity) {
         entityManager.merge(answerEntity);
     }
+    /**
+     * delete answers from the DB
+     *
+     * @param answerId : require answerId
+     */
+    public AnswerEntity deleteAnswer(final String answerId) {
+        AnswerEntity deleteAnswer = getAnswerById(answerId);
+        if (deleteAnswer != null) {
+            entityManager.remove(deleteAnswer);
+        }
+        return deleteAnswer;
+    }
 }
