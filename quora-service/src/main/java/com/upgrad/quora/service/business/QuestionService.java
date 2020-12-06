@@ -5,10 +5,7 @@ import com.upgrad.quora.service.dao.UserAuthDao;
 import com.upgrad.quora.service.dao.UserDao;
 import com.upgrad.quora.service.entity.QuestionEntity;
 import com.upgrad.quora.service.entity.UserAuthEntity;
-import com.upgrad.quora.service.entity.UserEntity;
 import com.upgrad.quora.service.exception.AuthorizationFailedException;
-import com.upgrad.quora.service.exception.InvalidQuestionException;
-import com.upgrad.quora.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -56,6 +53,32 @@ public class QuestionService {
                 questionEntity.setUuid(UUID.randomUUID().toString());
                 questionEntity.setUserEntity(userAuthEntity.getUserEntity());
                 return questionDao.createQuestion(questionEntity);
+            }
+        }
+    }
+
+    /**
+     * Business logic to authorize user who wants to get a list of all questions and return list of
+     * questions
+     *
+     * @param authorization
+     * @return list of all questions
+     * @throws AuthorizationFailedException
+     */
+    public List<QuestionEntity> getAllQuestions(final String authorization)
+            throws AuthorizationFailedException {
+        UserAuthEntity userAuthEntity = userAuthDao.getUserAuthByToken(authorization);
+        if (userAuthEntity == null) {
+            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
+        } else {
+            // Retrieve logout_at attribute value of UserAuthEntity to check if user has already signed
+            // out
+            ZonedDateTime logoutAt = userAuthEntity.getLogoutAt();
+            if (logoutAt != null) {
+                throw new AuthorizationFailedException(
+                        "ATHR-002", "User is signed out.Sign in first to get all questions");
+            } else {
+                return questionDao.getAllQuestions();
             }
         }
     }

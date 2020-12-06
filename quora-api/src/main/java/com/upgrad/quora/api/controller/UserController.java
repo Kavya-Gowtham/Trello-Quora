@@ -96,6 +96,7 @@ public class UserController {
     /**
      * Request mapping to sign-out user
      *
+     * @param accessToken
      * @return SignoutResponse
      * @throws SignOutRestrictedException
      */
