@@ -64,4 +64,14 @@ public class QuestionDao {
         entityManager.persist(questionEntity);
         return questionEntity;
     }
+
+    /**
+     * delete a question from Database
+     *
+     * @param questionEntity
+     */
+    public void deleteQuestion(QuestionEntity questionEntity) {
+
+        entityManager.remove(questionEntity);
+    }
 }
