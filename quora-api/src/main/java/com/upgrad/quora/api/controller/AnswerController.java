@@ -49,8 +49,6 @@ public class AnswerController {
         answerResponse.setStatus("ANSWER CREATED");
         return new ResponseEntity<AnswerResponse>(answerResponse, HttpStatus.CREATED);
     }
-
-
     /**
      * This endpoint update the answer
      *
